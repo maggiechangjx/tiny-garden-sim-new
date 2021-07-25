@@ -1,0 +1,44 @@
+.hose {
+   background-color:rgb(184, 176, 178)
+}
+
+.left_side_btns {
+   margin-left: 67px;
+   display: flex;
+}
+
+#activate_water {display: none}
+
+.water_btn1 { 
+   background-color:rgb(211, 211, 211);
+   padding-left: 5px;
+   padding-right: 5px;
+   margin-right: 5px;
+   cursor: pointer;
+}
+
+#activate_water:checked ~ label
+.water_btn1 {background-color: rgb(153, 248, 248) }
+
+
+#activate_hose {display: none}
+
+.hose_btn1 { 
+   background-color:rgb(211, 211, 211);
+   padding-left: 5px;
+   padding-right: 5px;
+   cursor: pointer;
+}
+
+#activate_hose:checked ~ label
+.hose_btn1 {background-color: rgb(153, 248, 248) }
+
+
+.water {
+   background-color:rgba(107, 188, 255, 0.959);
+}
+
+
+
+
+

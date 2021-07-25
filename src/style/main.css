@@ -1,0 +1,142 @@
+html {background-color:rgb(255, 253, 241); }
+
+.frame {
+  height: 1120px; /*h = 80*/
+  width: 1260px;   /*w=90  1350 + 90*2 */  
+  display: flex;
+  flex-wrap: wrap;
+  /* margin: auto; */
+  /*padding-top: 30px;*/
+  /* width: 50%; */
+  background-color: rgb(201, 0, 0);
+}
+
+.soil {
+  height: 12px;
+  width: 12px;
+  border-color: rgb(87, 102, 33);
+  border-style: dotted;
+  border-width: .5px;
+  background-color: rgb(96, 61, 29);
+}
+
+.organic {
+  background-color:rgb(84, 48, 15)
+}
+
+.topsoil {
+  background-color: rgb(109, 69, 31);
+}
+
+.subsoil {
+  background-color:rgb(109, 86, 59)
+}
+
+.rock {
+  background-color: gray;
+}
+
+.sky {
+  height: 12px;
+  width: 12px;
+  border-color: rgb(236, 247, 250);
+  border-style: dotted;
+  border-width: .5px;
+  background-color:rgb(189, 225, 235)
+}
+
+.h_root {
+  background-color: rgb(106, 0, 255);
+}
+
+.v_root {
+  background-color: rgb(255, 196, 0);
+}
+
+.mycor {
+  background-color:rgb(169, 169, 169);
+}
+
+.h_plant {
+  background-color: rgb(0, 138, 78);
+}
+
+.h_plant_wilted {
+  background-color: rgb(113, 124, 82);
+}
+
+.v_plant {
+  background-color:rgb(0, 70, 82);
+}
+
+.v_plant_wilted {
+  background-color:rgb(52, 82, 82);
+}
+
+.h_flower {
+  background-color: salmon;
+}
+
+.h_flower_wilted {
+  background-color: rgb(156, 99, 93);
+}
+
+.v_flower {
+  background-color: rgb(255, 102, 209);
+}
+
+.v_flower_wilted {
+  background-color: rgb(148, 100, 134);
+}
+
+.hv_root {
+  background-color:rgb(106, 113, 66);
+}
+
+.hv_plant {
+  background-color: rgb(225, 106, 93);
+}
+
+.hv_flower {
+  background: rgb(211, 255, 52);
+}
+
+.sim {
+  display: flex;
+}
+
+.seed_btns button {
+  display: block;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.instruction {
+  margin: auto;
+  width: 75%;
+}
+
+
+.ctrl_btns {
+  margin-top: 100px;
+  width: 75%;
+}
+
+
+.ctrl_btns button {
+  cursor: pointer;
+  display: block;
+  margin: 10px;
+}
+
+.menu_btns {
+  margin-top: 200px;
+}
+
+.menu_btns button {
+  margin: 10px;
+  cursor: pointer;
+  display: block;
+}
+
+

@@ -1,0 +1,17 @@
+{
+  "name": "base-node",
+  "version": "0.0.1",
+  "description": "A basic repo that compiles and builds a website",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "node bld/build.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chokidar": "^3.5.1",
+    "esbuild": "^0.12.5",
+    "live-server": "^1.2.1"
+  }
+}
