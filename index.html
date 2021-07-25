@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>tiny garden sim</title>
+    <link rel="stylesheet" href="bundle.css">
+  </head>
+  <body>
+    <div class="page">
+      
+      <div class="sim">
+        <!-- soil nutrient grid-->
+        <div class="hidden-nutri">
+          <div class='nutri_frame'></div>
+        </div>
+
+        <!-- hose and water buttons -->
+        <div class='left_side_btns'>
+          <!-- <button id='water_btn1'>💧</button> -->
+          <!-- <button id='hose_btn1'>🚰</button> -->
+          <input type='checkbox' id='activate_water'>
+            <label for='activate_water'>
+              <!-- <button id='water_btn2'>water</button> -->
+              <div class='water_btn1'>
+                <p>💧</p>
+              </div>
+            </label>
+          <input type='checkbox' id='activate_hose'>
+            <label for='activate_hose'>
+              <div class='hose_btn1'>
+                <p>🚰</p>
+              </div>
+            </label>
+        </div>
+
+        <!-- soil and sky grid -->
+        <div class="frame"></div>
+
+        <!-- more buttons -->
+        <div class='right_btns'>
+          <div class='seed_btns'>
+            <!-- <button>seed1</button> -->
+            <!-- <button>seed2</button> -->
+            <!-- <button>grow mycor</button> -->
+          <div class='menu_btns'>
+            <button id='nutri'>Nutrients</button>
+          </div>
+          </div>
+          <div class="ctrl_btns">
+            <button id="play">Play</button>
+            <button id="pause">Pause</button>
+            <button id="next">Next</button>
+            <button id="restart">Restart</button>
+          </div>
+        </div>
+      </div>
+      <div class="instruction">
+        <p>
+          Click the soil once to plant a horizontally-growing seed.<br>
+          Double click to plant a vertically-growing seed. <br>
+          Gardening capabilities will eventually be improved and expanded!</p>
+      </div>
+      
+
+    </div>
+  </body>
+  <script type="text/javascript" src="bundle.js"></script>
+</html>
