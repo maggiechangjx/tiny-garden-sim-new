@@ -105,11 +105,37 @@ html {background-color:rgb(255, 253, 241); }
   display: flex;
 }
 
-.seed_btns button {
+.soil_btns button {
   display: block;
   cursor: pointer;
   margin: 10px;
+  border-radius: 3px;
+  border: none; 
 }
+
+.seed_btns button {
+  background-color:rgb(191, 199, 184);
+  height: 18px;
+}
+
+#h_seed_btn.toggled {
+  background-color: rgb(134, 84, 250);
+}
+
+
+#v_seed_btn.toggled {
+  background-color: rgb(255, 200, 82);
+}
+
+#nutri {
+  background-color:rgb(199, 193, 209);
+  height: 18px;
+}
+
+#nutri.toggled {
+  background-color:rgb(253, 163, 80);
+}
+
 
 .instruction {
   margin: auto;
@@ -119,7 +145,6 @@ html {background-color:rgb(255, 253, 241); }
 
 .ctrl_btns {
   margin-top: 100px;
-  width: 75%;
 }
 
 
@@ -127,6 +152,10 @@ html {background-color:rgb(255, 253, 241); }
   cursor: pointer;
   display: block;
   margin: 10px;
+  border-radius: 3px;
+  border: none; 
+  background-color: rgb(205, 238, 168);
+  height: 18px;
 }
 
 .menu_btns {
@@ -138,5 +167,4 @@ html {background-color:rgb(255, 253, 241); }
   cursor: pointer;
   display: block;
 }
-
 

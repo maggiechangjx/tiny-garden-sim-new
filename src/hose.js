@@ -29,9 +29,18 @@ let nutriActivities = require('./nutri-grid.js');
 let soilNutri = nutriActivities.soilNutri;
 let soilNutriRec = nutriActivities.soilNutriRec;
 
+let styling = require('./style-helper.js');
+let {
+   toggleBtnOnOff
+} = styling;
+
+// buttons
 const waterBtn1 = document.getElementById('activate_water');
 //const waterBtn2 = document.getElementById('water_btn2');
 const hoseBtn1 = document.getElementById('activate_hose'); 
+
+const waterBtn = document.getElementById('water_btn');
+const hoseBtn = document.getElementById('hose_btn');
 
 
 
@@ -204,18 +213,19 @@ function waterOn() {
 
 
 
-// =======
-// buttons
-// =======
+// ===========================
+// buttons, execute functions
+// ===========================
 
-hoseBtn1.addEventListener('change', function() { 
-   sky.forEach((cell) => { buildHose(cell) });});
+waterBtn.addEventListener('click', function() {
+   toggleBtnOnOff(waterBtn);
+   waterOn();
+});
 
- 
-waterBtn1.addEventListener('change', waterOn); 
-
-//waterBtn2.addEventListener('click', getSpigots);
-
+hoseBtn.addEventListener('click', function() {
+   toggleBtnOnOff(hoseBtn);
+   sky.forEach((cell) => { buildHose(cell) });
+})
 
 
 
@@ -226,7 +236,7 @@ module.exports = {
    isHose,
    waterFlow,
    waterOn,
-   waterBtn1 
+   waterBtn
 }
 
 

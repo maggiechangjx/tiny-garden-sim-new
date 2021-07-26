@@ -6,6 +6,7 @@
 // =====================
 
 import "./style/main.css";
+
 // not sure why modulle.exports and require() doesn't work / 'TypeError: coordX is not a function'
 import {coordY, coordX, coordToIndex} from './index-coord-helper.js';
 
@@ -66,8 +67,13 @@ let {
    isHose,
    waterFlow,
    waterOn,
-   waterBtn1
+   waterBtn
 } = hoseActivities;
+
+let styling = require('./style-helper.js');
+let {
+   toggleBtnOnOff
+} = styling;
 
 
 // offset step time
@@ -86,6 +92,9 @@ const playBtn = document.getElementById('play');
 const pauseBtn = document.getElementById('pause');
 const nextBtn = document.getElementById('next');
 const reBtn = document.getElementById('restart');
+
+const hSeedBtn = document.getElementById('h_seed_btn');
+const vSeedBtn = document.getElementById('v_seed_btn');
 const nutriBtn = document.getElementById('nutri');
 
 
@@ -128,7 +137,7 @@ function step() {
    }
 
    // water in nutri grid
-   if (waterBtn1.checked) { waterOn(); }  // the hose takes a while to turn off
+   if (waterBtn.className == 'toggled') { waterOn(); }  // the hose takes a while to turn off
    waterNutriFlow();
    updateNutriRec();
 
@@ -206,8 +215,6 @@ for (let i = 0; i < soil.length; i++) {
    soilNutri[i].className = soilNutriRec[i];
 }
 
-soil.forEach((cell) => { toggleHRoot(cell) });
-soil.forEach((cell) => { toggleVRoot(cell) });
 
 /* sky.forEach((cell) => { toggleHose(cell) }); */
 
@@ -230,6 +237,25 @@ isHose(sky[90]);
 // ===========================
 
 
+hSeedBtn.addEventListener('click', function() {
+   soil.forEach((cell) => { toggleHRoot(cell) });
+   toggleBtnOnOff(hSeedBtn);
+});
+
+vSeedBtn.addEventListener('click', function() {
+   soil.forEach((cell) => { toggleVRoot(cell) });
+   toggleBtnOnOff(vSeedBtn);
+});
+
+
+nutriBtn.addEventListener('click', function() {
+   showNutri();
+   toggleBtnOnOff(nutriBtn);
+});
+
+
+
+
 playBtn.addEventListener('click', function() {
    timer = setInterval(step, 400); });
    // need to prevent player from executing 'play' more than once 
@@ -245,7 +271,11 @@ reBtn.addEventListener('click', function() {
 
 //reBtn.addEventListener('click', restart);
 
-nutriBtn.addEventListener('click', showNutri);
+
+
+
+
+
 
 //waterBtn2.addEventListener('click', getSpigots);
 

@@ -3,36 +3,25 @@
 }
 
 .left_side_btns {
-   margin-left: 67px;
-   display: flex;
+   margin-left: 59px;
+   margin-right: 12px;
 }
 
-#activate_water {display: none}
-
-.water_btn1 { 
-   background-color:rgb(211, 211, 211);
-   padding-left: 5px;
-   padding-right: 5px;
-   margin-right: 5px;
+.left_side_btns button {
    cursor: pointer;
+   border: none;
+   border-radius: 3px;
+   background-color: rgb(216, 217, 221);
+   height: 50px;
 }
 
-#activate_water:checked ~ label
-.water_btn1 {background-color: rgb(153, 248, 248) }
-
-
-#activate_hose {display: none}
-
-.hose_btn1 { 
-   background-color:rgb(211, 211, 211);
-   padding-left: 5px;
-   padding-right: 5px;
-   cursor: pointer;
+#water_btn.toggled {
+   background-color: rgb(153, 248, 248);
 }
 
-#activate_hose:checked ~ label
-.hose_btn1 {background-color: rgb(153, 248, 248) }
-
+#hose_btn.toggled {
+   background-color: rgb(153, 248, 248);
+}
 
 .water {
    background-color:rgba(107, 188, 255, 0.959);
