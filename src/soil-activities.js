@@ -20,13 +20,19 @@ let {
    WIDTH, 
    SOIL_HEIGHT, 
    HEIGHT, 
+   MYCOR_NUM,
+   MYCOR_RADIUS,
+   MYCOR_MIN_RADIUS,
    LOWEST_STARTING_NUTRI, 
    MAX_NUTRI, 
    frame} = worldParams;
 
+/*
+// now included in worldParams
 const MYCOR_NUM = 1;
 const MYCOR_RADIUS = 5;
 const MYCOR_MIN_RADIUS = 1;
+*/
 
 let soil = [];
 let soilInfo = [];
@@ -599,8 +605,11 @@ function reduceNutrient(i) {
          // but not sure why mycor disappears all together
          for (let i = 0; i < mycorInfo.length; i++) {
             if (mycorInfo[i].id = i) mycorInfo.splice(i, 1);
-         }
+         } 
       }
+   }
+   if (soil[i].className.includes('mycor')) {
+      soilInfo[i].nutri += .5;
    }
 }
 

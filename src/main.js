@@ -52,6 +52,7 @@ let {WIDTH,
    LOWEST_STARTING_NUTRI,    // lowest nutri value to be distributed to soil cells 
    LOW_NUTRI,                 // indicating soil has low nutri 
    MAX_NUTRI,                // highest nutri value to be initially distributed 
+   ROOT_GROWTH_RATE
 } = worldParams;
 
 let nutriGrid = require('./nutri-grid.js');
@@ -138,6 +139,7 @@ localStorage.setItem('totalStep', totalStep);
 //soil = JSON.parse(localStorage.getItem('soil'))
 
 
+
 // offset step time
 let totalStep = 0;
 let mycorGrowthRate = 3;
@@ -170,8 +172,217 @@ const singleSeedBtn = document.getElementById('single_seed_btn');
 
 // make roots constantly reduce nutrients in soil 
 
+let prevDateTime = new Date();
+let prevMonth = prevDateTime.getMonth();
+let prevDay = prevDateTime.getDate();   // returns number
+let prevHr = prevDateTime.getHours();
+let prevMin = prevDateTime.getMinutes();
+let prevSec = prevDateTime.getSeconds();
+
+/*
+let currMonth = dateTime.getMonth();
+let currDay = dateTime.getDate();
+let currHr = dateTime.getHours();
+let currMin = dateTime.getMinutes();
+let currSec = dateTime.getSeconds();
+*/
+
+// if currMin - prevMin == some value, growRoot , prevMin = currMin 
+
+// roots grow 1 cell every hour 
+
+function timePassed(prevDate, currDate) {
+   // takes in 2 new Date() variables from different times to calculate 
+   // amount of time passed 
+   let mSecPassed = currDate - prevDate; 
+   let daysPassed = Math.round(mSecPassed / (1000*60*60*24));
+   let hoursPassed = Math.round(mSecPassed / (1000*60*60));
+   let minsPassed = Math.round(mSecPassed / (1000*60));
+   let secsPassed = Math.round(mSecPassed / (1000));
+
+   return {
+      daysPassed: daysPassed,
+      hoursPassed: hoursPassed,
+      minsPassed: minsPassed,
+      secsPassed: secsPassed,
+      mSecPassed: mSecPassed,
+   }
+}
+
+
+
 function step() {
    // iterate through all soil cells and grow roots
+   let currDateTime = new Date();
+   // let currDay = currDateTime.getDate();
+   // let currHr = currDateTime.getHours();
+   // let currMin = currDateTime.getMinutes();
+
+   let timeElapsed = timePassed(prevDateTime, currDateTime);
+   let {daysPassed, hoursPassed, minsPassed, secsPassed, mSecPassed} = timeElapsed;
+
+   // everything for updating soilInfo, plantInfo, and mycorInfo -- slow moving stuff 
+   if (minsPassed >= ROOT_GROWTH_RATE) {
+      for (let i = 0; i < soil.length; i++) {
+         if (soil[i].className.includes('h_root')) { growHRoot(i); }
+   
+         else if (soil[i].className.includes('v_root')) growVRoot(i);
+   
+         else if (soil[i].className.includes('mycor')
+         /* && totalStep % mycorGrowthRate == 0 */) { growMycor(i); }
+   
+   
+         if (soil[i].className.includes('seed1') ||
+         soil[i].className.includes('ud_plant1')) { growPlant1Under(i); }
+   
+         if (soil[i].className.includes('seed1') || 
+         soil[i].className.includes('root1')) { growRoot1(i); }
+         // else { continue }
+         reduceNutrient(i);
+         reducePlant1Nutri(i);
+         plant1UnderGone(i);
+      }
+      // iterate through sky cells and grow buds and plants   
+      // and drop water if hose is turned on 
+      for (let k = sky.length - WIDTH - 1; k > 0; k--) {
+         growPlants(k);
+         growPlant1Above(k);
+         // waterFlow(k);
+      } 
+      for (let j = sky.length - WIDTH; j < sky.length; j++) {
+         growBud(j);
+         seed1Bud(j);
+         wiltPlant1Bud(j);
+         // waterFlow(j);
+      }
+      for (let l = 0; l < sky.length - WIDTH; l++) {
+         wiltFlower(l);
+         wiltPlant(l);
+         plantGone(l);
+   
+         wiltFlower1(l);
+         wiltPlant1(l);
+         plant1Gone(l);
+      }
+      // update prevDateTime to currDateTime
+      prevDateTime = currDateTime;
+   }
+
+   // update display cells, water flow, nutri water flow 
+   // moves at the speed of step size
+   for (let k = 0; k < sky.length; k++) {
+      waterFlow(k);
+   } 
+   // water in nutri grid
+   if (waterBtn.className == 'toggled') { waterOn(); }  // the hose takes a while to turn off
+   waterNutriFlow();
+   updateNutriRec();
+
+   // update soil grid and nutri grid, make changes visible
+   for (let i = 0; i < soil.length; i++) {
+      soil[i].className = soilInfo[i].state;
+      soilNutri[i].className = soilNutriRec[i];
+      if (mycorInfo.includes(soilInfo[i].organism)) {
+         soil[i].className = soil[i].className.concat(' mycor');
+      }
+   }
+   // cleanMycorInfo();
+
+   // update sky
+   for (let i = 0; i < sky.length; i++) {
+      //wiltFlower(i);
+      let x = coordX(sky[i]);
+      let y = coordY(sky[i]);
+      sky[i].className = plantInfo[x].state[y]; 
+   }
+   // don't update prevDateTime
+   
+   console.log(`days: ${daysPassed}, hours: ${hoursPassed}, mins: ${minsPassed}, 
+   secs: ${secsPassed}, msecs: ${mSecPassed} `)
+   // totalStep += 1;
+   
+   /*
+   // localStorage.setItem('soil', JSON.stringify(soil));
+   localStorage.setItem('soilInfo', JSON.stringify(soilInfo));
+   localStorage.setItem('mycorInfo', JSON.stringify(mycorInfo));
+
+   // localStorage.setItem('sky', JSON.stringify(sky));
+   localStorage.setItem('plantInfo', JSON.stringify(plantInfo));
+
+   localStorage.setItem('soilNutri', JSON.stringify(soilNutri));
+   localStorage.setItem('soilNutriRec', JSON.stringify(soilNutriRec));
+
+   localStorage.setItem('allPlants', JSON.stringify(allPlants));
+
+   localStorage.setItem('totalStep', totalStep);
+   */
+}
+
+ 
+function restart() {
+   localStorage.clear();
+
+   totalStep = 0;
+   
+   for (let i = 0; i < WIDTH; i++) {
+      soil[i].className = 'soil organic';
+      soilInfo[i].state = 'soil organic';
+      soilInfo[i].nutri = Math.floor(Math.random() * (MAX_NUTRI-LOWEST_STARTING_NUTRI) + LOWEST_STARTING_NUTRI);
+   }
+   for (let i = WIDTH; i < soil.length / 2 - WIDTH; i++) {
+      soil[i].className = 'soil topsoil';
+      soilInfo[i].state = 'soil topsoil';
+      soilInfo[i].nutri = Math.floor(Math.random() * (MAX_NUTRI-LOWEST_STARTING_NUTRI) + LOWEST_STARTING_NUTRI);
+   }
+   for (let i = soil.length / 2 - WIDTH; i < soil.length; i++) {
+      soil[i].className = 'soil subsoil';
+      soilInfo[i].state = 'soil subsoil';
+      soilInfo[i].nutri = Math.floor(Math.random() * (MAX_NUTRI-LOWEST_STARTING_NUTRI) + LOWEST_STARTING_NUTRI);
+   }
+   for (let i = 0; i < sky.length; i++) {
+      let x = coordX(sky[i]);
+      let y = coordY(sky[i]);
+      sky[i].className = 'sky';
+      plantInfo[x].state[y] = 'sky';
+   }
+   createMycor();
+   
+   // updates for nutri grid
+   for (let i = 0; i < WIDTH*SOIL_HEIGHT; i++) {
+       soilNutriRec[i] = "soil-nutri nutri_soil";
+       soilNutri[i].className = "soil-nutri nutri_soil";
+
+      if (soilInfo[i].nutri < LOW_NUTRI &&
+      !soilNutriRec[i].includes('low-nutri')) {
+         soilNutri[i].className = soilNutri[i].className.concat(' low-nutri');
+         soilNutriRec[i]= soilNutriRec[i].concat(' low-nutri');
+      }
+      if (soilInfo[i].nutri >= LOW_NUTRI && 
+      soilInfo[i].nutri < LOWEST_STARTING_NUTRI + 2 &&
+      !soilNutriRec[i].includes('med-nutri')) {
+         soilNutriRec[i] = soilNutriRec[i].concat(' med-nutri');
+         soilNutri[i].className = soilNutri[i].className.concat(' med-nutri');
+      }
+      if (soilInfo[i].nutri > MAX_NUTRI) {
+         soilNutriRec[i] = soilNutriRec[i].replace('low-nutri', '');
+         soilNutriRec[i] = soilNutriRec[i].replace('med-nutri', '');
+         soilNutri[i] = soilNutri[i].replace('low-nutri', '');
+         soilNutri[i] = soilNutri[i].replace('med-nutri', '');
+      }
+      if (soilInfo[i].nutri <= 0 &&
+      !soilNutriRec[i].includes('dead-nutri')) {
+         soilNutriRec[i] = soilNutriRec[i].concat(' dead-nutri');
+         soilNutri[i].className = soilNutri[i].className.concat(' dead-nutri');
+      }
+    }
+
+   allPlants = [];
+}
+
+
+function stepFast() {
+   // iterate through all soil cells and grow roots
+   // without using dateTime
    for (let i = 0; i < soil.length; i++) {
       if (soil[i].className.includes('h_root') && 
       totalStep % hRootGrowthRate == 0 ) { growHRoot(i); }
@@ -241,6 +452,7 @@ function step() {
    }
    totalStep += 1;
    
+   /*
    // localStorage.setItem('soil', JSON.stringify(soil));
    localStorage.setItem('soilInfo', JSON.stringify(soilInfo));
    localStorage.setItem('mycorInfo', JSON.stringify(mycorInfo));
@@ -254,69 +466,8 @@ function step() {
    localStorage.setItem('allPlants', JSON.stringify(allPlants));
 
    localStorage.setItem('totalStep', totalStep);
+   */
 }
-
- 
-function restart() {
-   localStorage.clear();
-
-   totalStep = 0;
-   
-   for (let i = 0; i < WIDTH; i++) {
-      soil[i].className = 'soil organic';
-      soilInfo[i].state = 'soil organic';
-      soilInfo[i].nutri = Math.floor(Math.random() * (MAX_NUTRI-LOWEST_STARTING_NUTRI) + LOWEST_STARTING_NUTRI);
-   }
-   for (let i = WIDTH; i < soil.length / 2 - WIDTH; i++) {
-      soil[i].className = 'soil topsoil';
-      soilInfo[i].state = 'soil topsoil';
-      soilInfo[i].nutri = Math.floor(Math.random() * (MAX_NUTRI-LOWEST_STARTING_NUTRI) + LOWEST_STARTING_NUTRI);
-   }
-   for (let i = soil.length / 2 - WIDTH; i < soil.length; i++) {
-      soil[i].className = 'soil subsoil';
-      soilInfo[i].state = 'soil subsoil';
-      soilInfo[i].nutri = Math.floor(Math.random() * (MAX_NUTRI-LOWEST_STARTING_NUTRI) + LOWEST_STARTING_NUTRI);
-   }
-   for (let i = 0; i < sky.length; i++) {
-      let x = coordX(sky[i]);
-      let y = coordY(sky[i]);
-      sky[i].className = 'sky';
-      plantInfo[x].state[y] = 'sky';
-   }
-   createMycor();
-   
-   // updates for nutri grid
-   for (let i = 0; i < WIDTH*SOIL_HEIGHT; i++) {
-       soilNutriRec[i] = "soil-nutri nutri_soil";
-       soilNutri[i].className = "soil-nutri nutri_soil";
-
-      if (soilInfo[i].nutri < LOW_NUTRI &&
-      !soilNutriRec[i].includes('low-nutri')) {
-         soilNutri[i].className = soilNutri[i].className.concat(' low-nutri');
-         soilNutriRec[i]= soilNutriRec[i].concat(' low-nutri');
-      }
-      if (soilInfo[i].nutri >= LOW_NUTRI && 
-      soilInfo[i].nutri < LOWEST_STARTING_NUTRI + 2 &&
-      !soilNutriRec[i].includes('med-nutri')) {
-         soilNutriRec[i] = soilNutriRec[i].concat(' med-nutri');
-         soilNutri[i].className = soilNutri[i].className.concat(' med-nutri');
-      }
-      if (soilInfo[i].nutri > MAX_NUTRI) {
-         soilNutriRec[i] = soilNutriRec[i].replace('low-nutri', '');
-         soilNutriRec[i] = soilNutriRec[i].replace('med-nutri', '');
-         soilNutri[i] = soilNutri[i].replace('low-nutri', '');
-         soilNutri[i] = soilNutri[i].replace('med-nutri', '');
-      }
-      if (soilInfo[i].nutri <= 0 &&
-      !soilNutriRec[i].includes('dead-nutri')) {
-         soilNutriRec[i] = soilNutriRec[i].concat(' dead-nutri');
-         soilNutri[i].className = soilNutri[i].className.concat(' dead-nutri');
-      }
-    }
-
-   allPlants = [];
-}
-
 
 
 
@@ -430,8 +581,9 @@ singleSeedBtn.addEventListener('click', function() {
 
 
 playBtn.addEventListener('click', function() {
-   timer = setInterval(step, 100000); });
+   timer = setInterval(step, 300); });
    // need to prevent player from executing 'play' more than once 
+   // water is now executing at a really slow pace too bc of step
 
 pauseBtn.addEventListener('click', function() {clearInterval(timer);});
 
