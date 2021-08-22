@@ -1,6 +1,13 @@
 // visualizes nutrition distribution in soil when button is clicked 
 // and where water travels after it seeps into the soil
 
+
+/*
+To Do's
+- allow nutrients to distribute, not just to immediate neighbours 
+   - ex. if nutri level is maxed, distribute 1 to nearest neighbour(s) 
+*/
+
 import './style/nutri-grid.css';
 import {coordY, coordX, coordToIndex} from './index-coord-helper.js';
 
@@ -11,7 +18,8 @@ let {
    LOWEST_STARTING_NUTRI, 
    LOW_NUTRI, 
    MAX_NUTRI, 
-   FLOOD_THRESHOLD} = worldParams;
+   FLOOD_THRESHOLD,
+   WATER_NUTRI_VAL} = worldParams;
 
 let soilActivities = require('./soil-activities.js');
 let soilInfo = soilActivities.soilInfo;
@@ -95,7 +103,7 @@ function nutriNeighbours(cell) {
 function waterNutriFlow() {
    // directs how water flows within nutri grid 
    // water flows downwards and also hydrates nearest neighbours
-   // right now it's impossible to over water .. but not for long .. 
+   // right now it's impossible to over water .. 
    for (let i = 0; i < soilNutri.length; i++) {
 
       if (soilInfo[i].nutri > FLOOD_THRESHOLD &&
@@ -106,7 +114,7 @@ function waterNutriFlow() {
          let n = nutriNeighbours(soilNutri[i]); 
          
          if (soilInfo[i].nutri <= MAX_NUTRI) {
-            soilInfo[i].nutri += 1;
+            soilInfo[i].nutri += WATER_NUTRI_VAL;
             soilNutriRec[i] = soilNutriRec[i].replace(' soil-water', '');
             // console.log(`nutri lvl at soil cell ${i}: ${soilInfo[i].nutri}`);
             // console.log(`cell ${i} class name: ${soilNutriRec[i]}`);
@@ -115,14 +123,14 @@ function waterNutriFlow() {
          soilInfo[i].nutri > MAX_NUTRI &&
          i < soilNutri.length - WIDTH) {
             let below = i + WIDTH; 
-            if (soilInfo[below].nutri <= MAX_NUTRI) soilInfo[below].nutri += 1;
+            if (soilInfo[below].nutri <= MAX_NUTRI) soilInfo[below].nutri += WATER_NUTRI_VAL;
             soilNutriRec[below] = soilNutriRec[below].concat(' soil-water');
             soilNutriRec[i] = soilNutriRec[i].replace(' soil-water', '');
             // console.log(`next cell (${below}) class name: ${soilNutriRec[below]}`);
          }
          // hydrate neighbours too! 
          for (let j = 0; j < n.length; j++) {
-            if (soilInfo[n[j]].nutri <= MAX_NUTRI) soilInfo[n[j]].nutri +=1;
+            if (soilInfo[n[j]].nutri <= MAX_NUTRI) soilInfo[n[j]].nutri += WATER_NUTRI_VAL;
          }
       }
    }
@@ -131,6 +139,7 @@ function waterNutriFlow() {
 
 
 module.exports = {
+   nutriFrame,
    soilNutri,
    soilNutriRec,
    createSoilNutri,

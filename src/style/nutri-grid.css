@@ -4,7 +4,7 @@
    -webkit-overflow-scroll: touch;
  } */
 
-.hidden-nutri {
+ .hidden-nutri {
    display: none;
 }
 
@@ -16,10 +16,10 @@
 */
 
 .show-nutri {
-   width: 75%;
-   height: 100%;
+   /*width: 75%; */
+   /*height: 100%; */
    top: 288px;
-   left: 143px;
+   left: 8px;
    position: absolute;
    z-index: 2;
    display: block;

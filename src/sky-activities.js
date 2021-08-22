@@ -1,5 +1,8 @@
 // this allows plants to grow above soil
 
+// edit flower growth so stem wont continue to grow above flower when watering 
+
+
 // ========
 // set up
 // ========
@@ -13,6 +16,15 @@ let {WIDTH, SKY_HEIGHT, SOIL_HEIGHT, HEIGHT, LOW_NUTRI, frame} = worldParams;
 let soilActs = require('./soil-activities.js');
 let soil = soilActs.soil;
 let soilInfo = soilActs.soilInfo;
+
+/*
+let plant1 = require('./single-seed.js');
+let {
+   allPlants,
+   findIndex,
+   findSeedID,
+} = plant1
+*/
 
 let sky = []; 
 let plantInfo = [];
@@ -111,37 +123,62 @@ function growPlants(i) {
    let bot = i + WIDTH; 
    let x = coordX(sky[i]);
    let y = coordY(sky[i]);
-   let hstem = plantInfo[x].state.filter(cell => cell == 'sky h_plant');
-   let vstem = plantInfo[x].state.filter(cell => cell == 'sky v_plant');
+   let hstem = plantInfo[x].state.filter(cell => cell.includes('h_plant'));
+   let vstem = plantInfo[x].state.filter(cell => cell.includes('v_plant'));
+   let plant1stem = plantInfo[x].state.filter(cell => cell.includes('ab_plant1'))
 
-   if (sky[bot].className == 'sky h_plant' && 
-   sky[top].className !== 'sky h_flower' && 
-   sky[top].className !== 'sky v_plant' &&
+   // grow h plant
+   if (sky[bot].className.includes('h_plant') && 
+   !sky[top].className.includes('h_flower') && 
+   !sky[top].className.includes('v_plant') &&
+   !sky[top].className.includes('water') &&
    hstem.length < plantInfo[x].len) {
       plantInfo[x].state[y] = 'sky h_plant';
       // console.log('new stem at ' + i);
    }
-   else if (sky[bot].className == 'sky h_plant' &&
-   sky[top].className !== 'sky h_flower' && 
+   // grow h flower
+   else if (sky[bot].className.includes('h_plant') &&
+   !sky[top].className.includes( 'h_flower') && 
    hstem.length == plantInfo[x].len) {
       plantInfo[x].state[SKY_HEIGHT - hstem.length - 1] = 'sky h_flower';
       // console.log('new flower at ' + i);
    }
-   else if (sky[bot].className == 'sky v_plant' && 
-   sky[top].className !== 'sky v_flower' && 
-   sky[top].className !== 'sky h_plant' &&
+   // grow v plant
+   else if (sky[bot].className.includes('v_plant') && 
+   !sky[top].className.includes('v_flower') && 
+   !sky[top].className.includes('h_plant') &&
+   !sky[top].className.includes('water') &&
    vstem.length < plantInfo[x].len) {
       plantInfo[x].state[y] = 'sky v_plant';
    }
-   else if (sky[bot].className == 'sky v_plant' &&
-   sky[top].className !== 'sky v_flower' && 
+   // grow v flower
+   else if (sky[bot].className.includes('v_plant') &&
+   !sky[top].className.includes('v_flower') && 
    vstem.length == plantInfo[x].len) {
       plantInfo[x].state[SKY_HEIGHT - vstem.length - 1] = 'sky v_flower';
    }
+   /*
+   // grow plant1
+   else if (sky[bot].className.includes('ab_plant1') &&
+   !sky[top].className.includes('flower1') &&
+   !sky[top].className.includes('water') &&
+   plant1stem.length < plantInfo[x].len) {
+      plantInfo[x].state[y] = 'sky ab_plant1';
+   }
+   // grow flower1 
+   else if (sky[bot].className.includes('ab_plant1') &&
+   !sky[top].className.includes('flower1') &&
+   plant1stem.length == plantInfo[x].len) {
+      plantInfo[x].state[SKY_HEIGHT - plant1stem.length - 1] = 'sky flower1';
+      // once flower grows, set new max root length 
+   }
+   */
 }
 
 
+// =============
 // wilt plants
+// =============
 
 function wiltPlant(i) {
    // if flower is wilted and root is still low on nutrients, 
@@ -211,7 +248,9 @@ function plantGone(i) {
       !soil[rootID].className.includes('h_root')) {
 
          for (let j = 0; j < SKY_HEIGHT; j++) {
-            plantInfo[x].state[j] = 'sky';
+            if (!plantInfo[x].state[j].includes('hose')){
+               plantInfo[x].state[j] = 'sky';
+            }
          }
       }
    }
@@ -224,7 +263,9 @@ function plantGone(i) {
       !soil[rootID].className.includes('v_root')) {
 
          for (let j = 0; j < SKY_HEIGHT; j++) {
-            plantInfo[x].state[j] = 'sky';
+            if (!plantInfo[x].state[j].includes('hose')){
+               plantInfo[x].state[j] = 'sky';
+            }
          }
       }
    }

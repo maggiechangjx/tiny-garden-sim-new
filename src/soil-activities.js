@@ -1,5 +1,13 @@
 // This file contains all the code for all activies that happen in the soil
 
+
+/*
+TO DO's: 
+- fix mycor so they don't all disappear all at once 
+- design mycellium + root interactions 
+*/
+
+
 // ========
 // set up
 // ========
@@ -16,7 +24,7 @@ let {
    MAX_NUTRI, 
    frame} = worldParams;
 
-const MYCOR_NUM = 10;
+const MYCOR_NUM = 1;
 const MYCOR_RADIUS = 5;
 const MYCOR_MIN_RADIUS = 1;
 
@@ -26,7 +34,7 @@ let mycorInfo = [];
 
 class soilCell {
    constructor(state, nutri, id, organism) {
-      this.state = state;  // soil, h_root, v_root
+      this.state = state;  // soil, h_root, v_root, root1
       this.nutri = nutri;  // nutrient level in specific soil cell
       this.id = id;        // soil id
       this.organism = organism;    // any organism populating the cell
@@ -115,7 +123,7 @@ function toggleHRoot(cell) {
 function toggleVRoot(cell) {
    // double click to make vertical root,
    // reduce soil nutri level by 1
-   cell.addEventListener('dblclick', () => {
+   cell.addEventListener('click', () => {
       cell.classList.toggle('v_root');
       soilInfo[cell.id].state = cell.className;
       soilInfo[cell.id].nutri -= .5;
@@ -573,21 +581,25 @@ function growHVRoot(i) {
 function reduceNutrient(i) {
    if (soil[i].className.includes('h_root') ||
    soil[i].className.includes('v_root') ||
-   soil[i].className.includes('mycor')) {
-      soilInfo[i].nutri -= .5;
+   soil[i].className.includes('mycor') // ||
+   // soil[i].className.includes('ud_plant1') ||
+   // soil[i].className.includes('root1') ||
+   /* soil[i].className.includes('seed1') */) {
+      if (soilInfo[i].nutri > 0) soilInfo[i].nutri -= .5;
       // console.log(`soil cell ${i} nutrient lvl reduce by 1`)
-   }
-   // if soil cell runs out of nutrients
-   if (soilInfo[i].nutri <= 0) {
-      let stotal = WIDTH * SOIL_HEIGHT;
-      if (i < WIDTH) soilInfo[i].state = 'soil organic';
-      else if (i >= WIDTH && i < stotal / 2 - WIDTH) soilInfo[i].state = 'soil topsoil';
-      else if (i < stotal) soilInfo[i].state = 'soil subsoil';
 
-      // remove from mycorInfo too!! 
-      // but not sure why mycor disappears all together
-      for (let i = 0; i < mycorInfo.length; i++) {
-         if (mycorInfo[i].id = i) mycorInfo.splice(i, 1);
+      // if soil cell runs out of nutrients
+      if (soilInfo[i].nutri <= 0) {
+         let stotal = WIDTH * SOIL_HEIGHT;
+         if (i < WIDTH) soilInfo[i].state = 'soil organic';
+         else if (i >= WIDTH && i < stotal / 2 - WIDTH) soilInfo[i].state = 'soil topsoil';
+         else if (i < stotal) soilInfo[i].state = 'soil subsoil';
+
+         // remove from mycorInfo too!! 
+         // but not sure why mycor disappears all together
+         for (let i = 0; i < mycorInfo.length; i++) {
+            if (mycorInfo[i].id = i) mycorInfo.splice(i, 1);
+         }
       }
    }
 }
@@ -597,11 +609,13 @@ module.exports = {
    soil: soil,
    soilInfo: soilInfo,
    mycorInfo: mycorInfo,
+   arrIncludes,
    createSoil, 
    loadSoilInfo, 
    createMycor, 
    toggleHRoot, 
    toggleVRoot, 
+   mostNutri,
    growMycor, 
    growVRoot, 
    growHRoot, 

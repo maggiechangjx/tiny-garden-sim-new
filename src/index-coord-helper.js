@@ -38,13 +38,6 @@ function coordToIndex(lst) {
    return lst[1] * WIDTH + lst[0]
 }
 
-/*
-module.export = {
-   coordY, 
-   coordX, 
-   coordToIndex
-}
-*/
 
 export {
    coordY,

@@ -6,6 +6,10 @@ Code for:
 - turning on water for built hoses
 */
 
+// rn the hose doesn't work when crinkled, pls fix 
+// water not passing through wilted flower 
+// water might not be getting into the ground when there is flower 
+
 // ======
 // set up
 // ======
@@ -166,7 +170,7 @@ function waterFlow(i) {
          let belowX = coordX(sky[belowID]);
          let belowY = coordY(sky[belowID]);
 
-         plantInfo[ogX].state[ogY] = plantInfo[ogX].state[ogY].replace('water', '');
+         plantInfo[ogX].state[ogY] = plantInfo[ogX].state[ogY].replace(' water', '');
          plantInfo[belowX].state[belowY] = plantInfo[belowX].state[belowY].concat(' water');
       }
    }
@@ -180,7 +184,7 @@ function waterFlow(i) {
       // console.log(`soil cell to water: ${belowID}`)
       soilNutriRec[belowID] = soilNutriRec[belowID].concat(' soil-water');
       // soilInfo[belowID].nutri += 1;
-      plantInfo[ogX].state[ogY] = plantInfo[ogX].state[ogY].replace('water', '');
+      plantInfo[ogX].state[ogY] = plantInfo[ogX].state[ogY].replace(' water', '');
       // the way water moves through the rest of the nutri grid is coded in nutri-grid.js 
    }
 }
@@ -202,7 +206,9 @@ function waterOn() {
             let waterX = coordX(sky[waterID]);
             let waterY = coordY(sky[waterID]);
 
-            plantInfo[waterX].state[waterY] = plantInfo[waterX].state[waterY].concat(' water');
+            if (!plantInfo[waterX].state[waterY].includes('water')) {
+               plantInfo[waterX].state[waterY] = plantInfo[waterX].state[waterY].concat(' water');
+            }
             sky[waterID].className = sky[waterID].className.concat(' water');
             // console.log(`current spigot ${spigots[i].id} is a built hose`);
          }

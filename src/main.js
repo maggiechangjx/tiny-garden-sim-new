@@ -1,5 +1,5 @@
-// main js file (yes main.js)
 // executes all codes to make the garden alive 
+
 
 // =====================
 // sim environment setup
@@ -9,6 +9,7 @@ import "./style/main.css";
 
 // not sure why modulle.exports and require() doesn't work / 'TypeError: coordX is not a function'
 import {coordY, coordX, coordToIndex} from './index-coord-helper.js';
+
 
 let soilActivities = require('./soil-activities.js');
 let {
@@ -20,6 +21,7 @@ let {
    createMycor, 
    toggleHRoot, 
    toggleVRoot, 
+   mostNutri,
    growMycor, 
    growVRoot, 
    growHRoot, 
@@ -43,15 +45,18 @@ let {
 } = skyActivies;
 
 let worldParams = require('./world-params.js');
-let {WIDTH, 
-   SKY_HEIGHT, 
-   SOIL_HEIGHT, 
-   HEIGHT, 
-   LOWEST_STARTING_NUTRI,
-    MAX_NUTRI} = worldParams;
+let {WIDTH,
+   SKY_HEIGHT,
+   SOIL_HEIGHT,
+   HEIGHT,
+   LOWEST_STARTING_NUTRI,    // lowest nutri value to be distributed to soil cells 
+   LOW_NUTRI,                 // indicating soil has low nutri 
+   MAX_NUTRI,                // highest nutri value to be initially distributed 
+} = worldParams;
 
 let nutriGrid = require('./nutri-grid.js');
 let {
+   nutriFrame,
    soilNutri,
    soilNutriRec,
    createSoilNutri,
@@ -76,6 +81,63 @@ let {
 } = styling;
 
 
+
+
+let plant1 = require('./single-seed.js');
+let {
+   allPlants,
+   // skyInfo,
+   // loadSkyInfo,
+   findIndex,
+   toggleSeed1,
+   findSeedID,
+   growRoot1,
+   growPlant1Under,
+   growPlant1Above,
+   seed1Bud,
+   reducePlant1Nutri,
+   wiltFlower1,
+   wiltPlant1,
+   wiltPlant1Bud,
+   plant1Gone,
+   plant1UnderGone
+} = plant1;
+
+   /*
+   localStorage.setItem('soil', soil);
+   localStorage.setItem('soilInfo', soilInfo);
+   localStorage.setItem('mycorInfo', mycorInfo);
+
+   localStorage.setItem('sky', sky);
+   localStorage.setItem('plantInfo', plantInfo);
+
+   localStorage.setItem('soilNutri', soilNutri);
+   localStorage.setItem('soilNutriRec', soilNutriRec);
+
+   localStorage.setItem('allPlants', allPlants);
+
+   localStorage.setItem('totalStep', totalStep);
+   
+
+/*
+localStorage.setItem('soil', JSON.stringify(soil));
+localStorage.setItem('soilInfo', JSON.stringify(soilInfo));
+localStorage.setItem('mycorInfo', JSON.stringify(mycorInfo));
+
+localStorage.setItem('sky', JSON.stringify(sky));
+localStorage.setItem('plantInfo', JSON.stringify(plantInfo));
+
+localStorage.setItem('soilNutri', JSON.stringify(soilNutri));
+localStorage.setItem('soilNutriRec', JSON.stringify(soilNutriRec));
+
+localStorage.setItem('allPlants', JSON.stringify(allPlants));
+
+localStorage.setItem('totalStep', totalStep);
+*/
+
+//soil = JSON.parse(localStorage.getItem('soil'))
+
+
 // offset step time
 let totalStep = 0;
 let mycorGrowthRate = 3;
@@ -97,6 +159,8 @@ const hSeedBtn = document.getElementById('h_seed_btn');
 const vSeedBtn = document.getElementById('v_seed_btn');
 const nutriBtn = document.getElementById('nutri');
 
+const singleSeedBtn = document.getElementById('single_seed_btn');
+
 
 
 
@@ -116,24 +180,41 @@ function step() {
 
       else if (soil[i].className.includes('mycor')
       /* && totalStep % mycorGrowthRate == 0 */) { growMycor(i); }
+
+
+      if (soil[i].className.includes('seed1') ||
+      soil[i].className.includes('ud_plant1')) { growPlant1Under(i); }
+
+      if (soil[i].className.includes('seed1') || 
+      soil[i].className.includes('root1')) { growRoot1(i); }
       // else { continue }
       reduceNutrient(i);
+      reducePlant1Nutri(i);
+      plant1UnderGone(i);
    }
 
    // iterate through sky cells and grow buds and plants   
    // and drop water if hose is turned on 
+   // why do I have 3 for loops here again??? 
    for (let k = sky.length - WIDTH - 1; k > 0; k--) {
       growPlants(k);
+      growPlant1Above(k);
       waterFlow(k);
    } 
    for (let j = sky.length - WIDTH; j < sky.length; j++) {
       growBud(j);
+      seed1Bud(j);
+      wiltPlant1Bud(j);
       waterFlow(j);
    }
    for (let l = 0; l < sky.length - WIDTH; l++) {
       wiltFlower(l);
       wiltPlant(l);
       plantGone(l);
+
+      wiltFlower1(l);
+      wiltPlant1(l);
+      plant1Gone(l);
    }
 
    // water in nutri grid
@@ -156,14 +237,31 @@ function step() {
       //wiltFlower(i);
       let x = coordX(sky[i]);
       let y = coordY(sky[i]);
-      sky[i].className = plantInfo[x].state[y];
+      sky[i].className = plantInfo[x].state[y]; 
    }
    totalStep += 1;
+   
+   // localStorage.setItem('soil', JSON.stringify(soil));
+   localStorage.setItem('soilInfo', JSON.stringify(soilInfo));
+   localStorage.setItem('mycorInfo', JSON.stringify(mycorInfo));
+
+   // localStorage.setItem('sky', JSON.stringify(sky));
+   localStorage.setItem('plantInfo', JSON.stringify(plantInfo));
+
+   localStorage.setItem('soilNutri', JSON.stringify(soilNutri));
+   localStorage.setItem('soilNutriRec', JSON.stringify(soilNutriRec));
+
+   localStorage.setItem('allPlants', JSON.stringify(allPlants));
+
+   localStorage.setItem('totalStep', totalStep);
 }
 
-
-// added more elements, need to restart more lists 
+ 
 function restart() {
+   localStorage.clear();
+
+   totalStep = 0;
+   
    for (let i = 0; i < WIDTH; i++) {
       soil[i].className = 'soil organic';
       soilInfo[i].state = 'soil organic';
@@ -186,11 +284,37 @@ function restart() {
       plantInfo[x].state[y] = 'sky';
    }
    createMycor();
-   totalStep = 0;
-   mycorInfo = [];
    
-   // reset nutri grid 
-   // reset mycor 
+   // updates for nutri grid
+   for (let i = 0; i < WIDTH*SOIL_HEIGHT; i++) {
+       soilNutriRec[i] = "soil-nutri nutri_soil";
+       soilNutri[i].className = "soil-nutri nutri_soil";
+
+      if (soilInfo[i].nutri < LOW_NUTRI &&
+      !soilNutriRec[i].includes('low-nutri')) {
+         soilNutri[i].className = soilNutri[i].className.concat(' low-nutri');
+         soilNutriRec[i]= soilNutriRec[i].concat(' low-nutri');
+      }
+      if (soilInfo[i].nutri >= LOW_NUTRI && 
+      soilInfo[i].nutri < LOWEST_STARTING_NUTRI + 2 &&
+      !soilNutriRec[i].includes('med-nutri')) {
+         soilNutriRec[i] = soilNutriRec[i].concat(' med-nutri');
+         soilNutri[i].className = soilNutri[i].className.concat(' med-nutri');
+      }
+      if (soilInfo[i].nutri > MAX_NUTRI) {
+         soilNutriRec[i] = soilNutriRec[i].replace('low-nutri', '');
+         soilNutriRec[i] = soilNutriRec[i].replace('med-nutri', '');
+         soilNutri[i] = soilNutri[i].replace('low-nutri', '');
+         soilNutri[i] = soilNutri[i].replace('med-nutri', '');
+      }
+      if (soilInfo[i].nutri <= 0 &&
+      !soilNutriRec[i].includes('dead-nutri')) {
+         soilNutriRec[i] = soilNutriRec[i].concat(' dead-nutri');
+         soilNutri[i].className = soilNutri[i].className.concat(' dead-nutri');
+      }
+    }
+
+   allPlants = [];
 }
 
 
@@ -202,6 +326,7 @@ function restart() {
 
 createSky();
 createSoil();
+// loadSkyInfo();
 loadSoilInfo();
 loadPlantInfo();
 
@@ -215,7 +340,7 @@ for (let i = 0; i < soil.length; i++) {
    soilNutri[i].className = soilNutriRec[i];
 }
 
-
+// click on a sky cell to turn it to h plant / v plant / hose 
 /* sky.forEach((cell) => { toggleHose(cell) }); */
 
 /*
@@ -224,13 +349,53 @@ sky.forEach((cell) => { toggleVPlant(cell) });
 */
 
 
-// delete later 
-getSpigots();
-nextHoseCell(sky[1], sky[91]);
-isHose(sky[90]);
+//// localStorage.setItem('soil', JSON.stringify(soil));
+// localStorage.setItem('soilInfo', JSON.stringify(soilInfo));
+// localStorage.setItem('mycorInfo', JSON.stringify(mycorInfo));
+
+//// localStorage.setItem('sky', JSON.stringify(sky));
+// localStorage.setItem('plantInfo', JSON.stringify(plantInfo));
+
+//// localStorage.setItem('soilNutri', JSON.stringify(soilNutri));
+// localStorage.setItem('soilNutriRec', JSON.stringify(soilNutriRec));
+
+// localStorage.setItem('allPlants', JSON.stringify(allPlants));
+
+// localStorage.setItem('totalStep', totalStep);
 
 
+/*
+// localStorage.setItem('soil', soil);
+localStorage.setItem('soilInfo', soilInfo);
+localStorage.setItem('mycorInfo', mycorInfo);
 
+localStorage.setItem('sky', sky);
+localStorage.setItem('plantInfo', plantInfo);
+
+localStorage.setItem('soilNutri', soilNutri);
+localStorage.setItem('soilNutriRec', soilNutriRec);
+
+localStorage.setItem('allPlants', allPlants);
+
+localStorage.setItem('totalStep', totalStep);
+*/
+
+// soil = localStorage.getItem('soil');
+// soil = JSON.parse(localStorage.getItem('soil'));
+
+/*
+soilInfo = JSON.parse(localStorage.getItem('soilInfo'));
+mycorInfo = JSON.parse(localStorage.getItem('mycorInfo'));
+
+plantInfo = JSON.parse(localStorage.getItem('plantInfo'));
+
+soilNutri = JSON.parse(localStorage.getItem('soilNutri'));
+soilNutriRec = JSON.parse(localStorage.getItem('soilNutriRec'));
+
+allPlants = JSON.parse(localStorage.getItem('allPlants'));
+
+totalStep = JSON.parse(localStorage.getItem('totalStep'));
+*/
 
 // ===========================
 // assign functions to buttons
@@ -255,9 +420,17 @@ nutriBtn.addEventListener('click', function() {
 
 
 
+singleSeedBtn.addEventListener('click', function() {
+   soil.forEach((cell) => { toggleSeed1(cell) });
+   toggleBtnOnOff(singleSeedBtn);
+});
+
+
+
+
 
 playBtn.addEventListener('click', function() {
-   timer = setInterval(step, 400); });
+   timer = setInterval(step, 300); });
    // need to prevent player from executing 'play' more than once 
 
 pauseBtn.addEventListener('click', function() {clearInterval(timer);});
