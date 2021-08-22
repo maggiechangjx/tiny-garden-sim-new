@@ -430,7 +430,7 @@ singleSeedBtn.addEventListener('click', function() {
 
 
 playBtn.addEventListener('click', function() {
-   timer = setInterval(step, 300); });
+   timer = setInterval(step, 100000); });
    // need to prevent player from executing 'play' more than once 
 
 pauseBtn.addEventListener('click', function() {clearInterval(timer);});
