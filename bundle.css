@@ -1,0 +1,396 @@
+/* src/style/main.css */
+html {
+  background-color: rgb(255, 253, 241);
+}
+.page {
+  display: flex;
+}
+.frame {
+  height: 910px;
+  width: 1330px;
+  display: flex;
+  flex-wrap: wrap;
+  position: absolute;
+  top: 50%;
+  left: 1.5%;
+  transform: translate(0, -50%);
+  background-color: rgb(168, 189, 158);
+}
+.controls {
+  position: absolute;
+  left: 90%;
+  top: 50%;
+  margin-top: -455px;
+  height: 910px;
+}
+.soil {
+  height: 12px;
+  width: 12px;
+  border-color: rgb(87, 102, 33);
+  border-style: dotted;
+  border-width: .5px;
+  background-color: rgb(96, 61, 29);
+}
+.organic {
+  background-color: rgb(84, 48, 15);
+}
+.topsoil {
+  background-color: rgb(109, 69, 31);
+}
+.subsoil {
+  background-color: rgb(109, 86, 59);
+}
+.sky {
+  height: 12px;
+  width: 12px;
+  border-color: rgb(236, 247, 250);
+  border-style: dotted;
+  border-width: .5px;
+  background-color: rgb(189, 225, 235);
+}
+.h_root {
+  background-color: rgb(106, 0, 255);
+}
+.v_root {
+  background-color: rgb(255, 196, 0);
+}
+.mycor {
+  background-color: rgb(169, 169, 169);
+}
+.h_plant {
+  background-color: rgb(0, 138, 78);
+}
+.h_plant_wilted {
+  background-color: rgb(113, 124, 82);
+}
+.v_plant {
+  background-color: rgb(0, 70, 82);
+}
+.v_plant_wilted {
+  background-color: rgb(68, 95, 95);
+}
+.h_flower {
+  background-color: salmon;
+}
+.h_flower_wilted {
+  background-color: rgb(156, 99, 93);
+}
+.v_flower {
+  background-color: rgb(255, 102, 209);
+}
+.v_flower_wilted {
+  background-color: rgb(148, 100, 134);
+}
+.hv_root {
+  background-color: rgb(106, 113, 66);
+}
+.sim {
+  display: flex;
+}
+#all_info {
+  position: absolute;
+  z-index: 4;
+  background-color: #6c5a8068;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  cursor: pointer;
+}
+#all_info_hide {
+  display: none;
+}
+.info_text_const {
+  position: absolute;
+  bottom: 33%;
+  left: 36.5%;
+  z-index: 2;
+  color: rgb(255, 159, 148);
+}
+.info_text_const_hide {
+  display: none;
+}
+#info {
+  color: rgb(255, 81, 61);
+}
+.info_box {
+  background-color: rgba(198, 255, 175, 0.849);
+  width: 550px;
+  height: 350px;
+  position: absolute;
+  top: 30%;
+  left: 26%;
+  border-radius: 5px;
+}
+.info1 {
+  position: absolute;
+  top: 37%;
+  left: 33%;
+  z-index: 2;
+}
+.info1_hide {
+  display: none;
+}
+.info2 {
+  position: absolute;
+  top: 37%;
+  left: 31%;
+  z-index: 2;
+}
+.info2_hide {
+  display: none;
+}
+.info3 {
+  position: absolute;
+  top: 36%;
+  left: 32%;
+  z-index: 2;
+}
+.info3_hide {
+  display: none;
+}
+.info4 {
+  position: absolute;
+  top: 37%;
+  left: 33%;
+  z-index: 2;
+}
+.info4_hide {
+  display: none;
+}
+.cls-1,
+.cls-2 {
+  fill: none;
+  stroke: #00e72d;
+  stroke-miterlimit: 10;
+  position: absolute;
+  transform: translate(100px, 50px) scale(0.7);
+}
+.info5_svg {
+  height: 100vh;
+  width: 100vh;
+  position: absolute;
+  left: 40%;
+  z-index: 5;
+}
+.cls-2 {
+  stroke-dasharray: 7.02 4.01;
+}
+.info5 p {
+  position: absolute;
+  top: 40%;
+  left: 35%;
+  z-index: 2;
+}
+.info5_hide {
+  display: none;
+}
+.info6 {
+  position: absolute;
+  top: 38%;
+  left: 32%;
+  z-index: 2;
+}
+.info6_hide {
+  display: none;
+}
+.info7 {
+  position: absolute;
+  top: 37%;
+  left: 30%;
+  z-index: 2;
+}
+.info7_hide {
+  display: none;
+}
+.top_btns {
+  height: 25px;
+}
+.top_btns button {
+  display: block;
+  cursor: pointer;
+  margin-bottom: 10px;
+  height: 50px;
+  width: 60px;
+  margin-left: auto;
+}
+#grow_btn.toggled {
+  background-color: rgb(255, 200, 194);
+  border: 0.5px dotted white;
+  color: white;
+  border-radius: 3px;
+}
+#grow_btn_hide {
+  visibility: hidden;
+}
+.restart_btn_cover {
+  background-color: rgb(126, 95, 64);
+  z-index: 3;
+  height: 52px;
+  width: 62px;
+  cursor: pointer;
+  border-radius: 3px;
+  position: absolute;
+}
+.restart_btn_cover_hide {
+  display: none;
+}
+#restart_btn.toggled {
+  background-color: salmon;
+  border: none;
+  border-radius: 3px;
+}
+#info_btn.toggled {
+  background-color: salmon;
+  border: none;
+  border-radius: 3px;
+}
+.bottom_btns {
+  margin-top: 695px;
+}
+.bottom_btns button {
+  cursor: pointer;
+  border: none;
+  background-color: rgb(216, 217, 221);
+  height: 40px;
+  width: 40px;
+  border-radius: 3px;
+  display: block;
+  margin-top: 10px;
+  margin-left: auto;
+}
+#plant1_btn.toggled {
+  background-color: rgb(153, 248, 248);
+}
+#nutri_btn.toggled {
+  background-color: rgb(153, 248, 248);
+}
+.hose {
+  background-color: rgb(184, 176, 178);
+}
+#water_btn.toggled {
+  background-color: rgb(153, 248, 248);
+}
+#hose_btn.toggled {
+  background-color: rgb(153, 248, 248);
+}
+.water {
+  background-color: rgba(107, 188, 255, 0.959);
+}
+.soil_btns button {
+  display: block;
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 3px;
+  border: none;
+}
+.seed_btns {
+  margin-top: 900px;
+}
+.seed_btns button {
+  background-color: rgb(191, 199, 184);
+  height: 18px;
+}
+#h_seed_btn.toggled {
+  background-color: rgb(134, 84, 250);
+}
+#v_seed_btn.toggled {
+  background-color: rgb(255, 200, 82);
+}
+#nutri {
+  background-color: rgb(199, 193, 209);
+}
+#nutri.toggled {
+  background-color: rgb(253, 163, 80);
+}
+.instruction {
+  margin: auto;
+  width: 75%;
+}
+.ctrl_btns {
+  margin-top: 100px;
+}
+.ctrl_btns button {
+  cursor: pointer;
+  display: block;
+  margin: 10px;
+  border-radius: 3px;
+  border: none;
+  background-color: rgb(205, 238, 168);
+  height: 18px;
+}
+.menu_btns {
+  margin-top: 200px;
+}
+.menu_btns button {
+  margin: 10px;
+  cursor: pointer;
+  display: block;
+}
+.seed1 {
+  background-color: rgb(92, 17, 198);
+}
+.root1 {
+  background-color: rgb(106, 0, 255);
+}
+.ud_plant1 {
+  background-color: rgb(66, 77, 40);
+}
+.ab_plant1 {
+  background-color: rgb(13, 162, 60);
+}
+.flower1 {
+  background-color: salmon;
+}
+.ab_plant1_wilted {
+  background-color: rgb(75, 104, 52);
+}
+.flower1_wilted {
+  background-color: rgb(193, 148, 155);
+}
+#single_seed_btn.toggled {
+  background-color: rgb(255, 173, 159);
+}
+
+/* src/style/nutri-grid.css */
+.hidden-nutri {
+  display: none;
+}
+.show-nutri {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  top: 50%;
+  left: 1.5%;
+  transform: translate(0, -35%);
+}
+.nutri_frame {
+  height: 700px;
+  width: 1330px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+}
+.nutri_soil {
+  height: 12px;
+  width: 12px;
+  border-color: rgb(87, 102, 33);
+  border-style: dotted;
+  border-width: .5px;
+  background-color: rgba(75, 38, 46, 0.9);
+}
+.low-nutri {
+  background-color: rgba(167, 165, 123, 0.9);
+}
+.med-nutri {
+  background-color: rgba(133, 98, 74, 0.9);
+}
+.dead-nutri {
+  background-color: rgba(36, 16, 20, 0.904);
+}
+.soil-water {
+  background-color: rgba(78, 96, 250, 0.877);
+}
+.soil-flood {
+  background-color: rgba(38, 35, 255, 0.973);
+}
