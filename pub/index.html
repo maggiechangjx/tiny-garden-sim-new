@@ -6,8 +6,94 @@
     <link rel="stylesheet" href="bundle.css">
   </head>
   <body>
-    <div class="page">
+    <div id='all_info'>
+      <div id='info'>
+        <div class='info1'>
+          <p>By flipping through tabs and clicking through links, <br>
+            you've stumbled across this little garden. <br>
+            As you can see, it is quite empty right now. <br>
+          </p>
+          <p>
+            Feel free to start the garden's life cycle whenever <br>
+            by clicking "Grow". But like all things in nature, <br>
+            once this garden starts growing, <br>
+            it can't be stopped by a simple click of a button. 
+          </p>
+        </div>
+        <div class='info2'>
+          <p>
+            To plant some seeds, click on 🌱 and then <br>
+            click on any soil cell on the grid. The deeper you <br>
+            plant the seed, the longer it will take the plant to <br>
+            dig its way above the soil. <br>
+          </p>
+          <p>
+            If you happen to plant it too deep, it might not reach the top! <br>
+            Even if you don't see anything happening right now, <br>
+            you'd have to trust that the seeds are actually growing. <br>
+          </p>
+        </div>
+        <div class='info3'>
+          <p>
+            You might want to also take care of the plants. <br>
+            To water the garden, you will need to build a hose, <br>
+            or several hoses. <br>
+           </p>
+           <p> 
+            Click on 🚰 and build hoses like so. <br>
+            The end of the hose must be connected to the edge of <br>
+            the garden, and there needs to be a proper nozzle. <br>
+          </p>
+          <p>
+            You can take apart the hoses any time and build as many <br>
+            hoses as you want, as long as they can fit on screen. 
+          </p>
+        </div>
+        <div class='info4'>
+          <p>
+            Click on 💧 to turn on the water <br>
+            (and click again to turn it off... duh). <br>
+            Water will only turn on if the hose is built well -- <br>
+            that means no broken hoses... <br>
+            although a little crinkle here or there might be okay... 
+          </p>
+        </div>
+        <div class='info5'>
+          <div class='info5_svg'>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 478 311"><defs></defs><title>Asset 2</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_2-2" data-name="Layer 2"><path class="cls-1" d="M0,222.5c1.18,0,2.35,0,3.5.05"/><path class="cls-2" d="M7.51,222.65C133.22,226.8,139.22,310.5,205,310.5c65,0,19-96,65-152s124.89-29.64,114,4c-11,34-58.79,49.22-50-50C340.81,35.66,407.22,2.34,472.5.57"/><path class="cls-1" d="M474.5.53l3.5,0"/></g></g></svg>
+          </div>
+          <p>
+          Ooooh? A mysterious patch of soil? 
+          </p>
+        </div>
+        <div class='info6'>
+          <p>
+            Speaking of soil, you can check the soil's nutrient <br>
+            content by clicking on 🌐 <br>
+            Light brown squares means that the soil is dehydrated, <br>
+            and dark brown means that the soil is doing very well, <br>
+            but deep brown means that the soil REALLY needs water. <br>
+          </p>
+        </div>
+        <div class='info7'>
+          <p>
+          As you can see, it's not difficult to grow a little garden, <br>
+          as long as you come back to maintain it every once in a while <br>
+          (... except maintaining it right now is a little difficult since <br>
+          the garden's current state can't be saved on the browser just yet). <br> 
+          You can always click on "Garden Info" if you ever need a reminder. 
+          </p>
+        </div>
+      </div>
+
       
+
+      
+      <p class='info_text_const'>Click anywhere to continue</p>
+      <div class='info_box'></div>
+    </div>
+
+    <div class="page">
       <div class="sim">
         <!-- soil nutrient grid-->
         <div class="hidden-nutri">
@@ -17,35 +103,45 @@
         <!-- soil and sky grid -->
         <div class="frame"></div>
       </div>
-      
+
       <div class="controls">
-        <!-- hose and water buttons -->
-        <div class='left_side_btns'>
-          <button id='water_btn'>💧</button>
-          <button id='hose_btn'>🚰</button>
+        <!-- new -->
+        <div class='top_btns'>
+          <button id='info_btn'>Garden Info</button>
+          <div class="restart_btn_cover"></div>
+          <button id='restart_btn'>Restart</button>
+          <button id='grow_btn'>Grow</button>
         </div>
 
-        <!-- more buttons -->
-        <div class='right_btns'>
-          <div class='soil_btns'>
-            <!-- plant seed -->
-            <div class='seed_btns'>
-              <button id='h_seed_btn'>Plant Purple Seed</button>
-              <button id='v_seed_btn'>Plant Yellow Seed</button>
-              <button id='single_seed_btn'>Plant Single Seed</button>
-            </div>
-            <!-- show nutri grid -->
-            <div class='menu_btns'>
-              <button id='nutri'>Show Nutrients</button>
-            </div>
-          </div>
-          <div class="ctrl_btns">
-            <button id="play">Play</button>
-            <button id="pause">Pause</button>
-            <button id="next">Next</button>
-            <button id="restart">Restart</button>
-          </div>
+        <div class='bottom_btns'>
+          <button id="plant1_btn">🌱</button>
+          <button id='hose_btn'>🚰</button>
+          <button id='water_btn'>💧</button>
+          <button id='nutri_btn'>🌐</button>
         </div>
+
+
+        <!-- more buttons -- won't need anymore -->
+        <!-- <div class='right_btns'> -->
+          <!-- <div class='soil_btns'> -->
+            <!-- plant seed -->
+            <!-- <div class='seed_btns'> -->
+            <!--   <button id='h_seed_btn'>Plant Purple Seed</button> -->
+            <!--   <button id='v_seed_btn'>Plant Yellow Seed</button> -->
+            <!--   <button id='single_seed_btn'>Plant Single Seed</button> -->
+            <!-- </div>  -->
+            <!-- show nutri grid -->
+            <!-- <div class='menu_btns'> -->
+            <!--   <button id='nutri'>Show Nutrients</button> -->
+          <!--   </div> -->
+        <!--   </div> -->
+        <!--   <div class="ctrl_btns"> -->
+          <!--   <button id="play">Play</button> -->
+            <!-- <button id="pause">Pause</button> -->
+            <!-- <button id="next">Next</button> -->
+           <!--  <button id="restart">Restart</button> -->
+        <!--   </div> -->
+       <!--  </div> -->
       </div>
       
 

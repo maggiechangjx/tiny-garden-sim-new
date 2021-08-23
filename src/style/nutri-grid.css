@@ -18,16 +18,20 @@
 .show-nutri {
    /*width: 75%; */
    /*height: 100%; */
-   top: 288px;
-   left: 8px;
+   /*top: 288px; */
+   /*left: 8px; */
    position: absolute;
    z-index: 2;
    display: block;
+   top: 50%;
+   left: 1.5%;
+   /* margin-top: -455px;  /* 910 / 2 */
+   transform: translate(0, -35%);
 }
 
 .nutri_frame {
-   height: 840px; /*h = 80*/
-   width: 1260px;   /*w=90  1350 + 90*2 */  
+   height: 700px; /*h = 80*/
+   width: 1330px;   /*w=90  1350 + 90*2 */  
    display: flex;
    flex-wrap: wrap;
    margin: auto;

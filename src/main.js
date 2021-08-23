@@ -78,10 +78,9 @@ let {
 
 let styling = require('./style-helper.js');
 let {
-   toggleBtnOnOff
+   toggleBtnOnOff,
+   fadeElem
 } = styling;
-
-
 
 
 let plant1 = require('./single-seed.js');
@@ -104,6 +103,19 @@ let {
    plant1UnderGone
 } = plant1;
 
+
+let page = require('./page-effects.js');
+let {
+   infoPage,
+   allInfo,
+   allInfoChildren,
+   initInfo,
+   cycleInfo
+} = page;
+
+
+let allInfo2 = document.getElementById('info');
+console.log(allInfo2);
    /*
    localStorage.setItem('soil', soil);
    localStorage.setItem('soilInfo', soilInfo);
@@ -152,16 +164,19 @@ let hRootGrowthRate = 2;
 //const waterBtn2 = document.getElementById('water_btn2');
 
 let timer;
-const playBtn = document.getElementById('play');
+const playBtn = document.getElementById('grow_btn');
 const pauseBtn = document.getElementById('pause');
 const nextBtn = document.getElementById('next');
-const reBtn = document.getElementById('restart');
+const reBtn = document.getElementById('restart_btn');
 
 const hSeedBtn = document.getElementById('h_seed_btn');
 const vSeedBtn = document.getElementById('v_seed_btn');
-const nutriBtn = document.getElementById('nutri');
+const nutriBtn = document.getElementById('nutri_btn');
 
-const singleSeedBtn = document.getElementById('single_seed_btn');
+const singleSeedBtn = document.getElementById('plant1_btn');
+
+const gardenInfoBtn = document.getElementById('info_btn');
+
 
 
 
@@ -475,6 +490,8 @@ function stepFast() {
 // initiate sim
 // =============
 
+initInfo();
+
 createSky();
 createSoil();
 // loadSkyInfo();
@@ -548,11 +565,13 @@ allPlants = JSON.parse(localStorage.getItem('allPlants'));
 totalStep = JSON.parse(localStorage.getItem('totalStep'));
 */
 
+
+
 // ===========================
 // assign functions to buttons
 // ===========================
 
-
+/*
 hSeedBtn.addEventListener('click', function() {
    soil.forEach((cell) => { toggleHRoot(cell) });
    toggleBtnOnOff(hSeedBtn);
@@ -562,14 +581,12 @@ vSeedBtn.addEventListener('click', function() {
    soil.forEach((cell) => { toggleVRoot(cell) });
    toggleBtnOnOff(vSeedBtn);
 });
-
+*/
 
 nutriBtn.addEventListener('click', function() {
    showNutri();
    toggleBtnOnOff(nutriBtn);
 });
-
-
 
 singleSeedBtn.addEventListener('click', function() {
    soil.forEach((cell) => { toggleSeed1(cell) });
@@ -581,21 +598,35 @@ singleSeedBtn.addEventListener('click', function() {
 
 
 playBtn.addEventListener('click', function() {
-   timer = setInterval(step, 300); });
+   if (playBtn.className !== 'toggled') {
+      toggleBtnOnOff(playBtn);
+      fadeElem(playBtn, 900, '0.15');
+      timer = setInterval(step, 300);
+   }
+    });
    // need to prevent player from executing 'play' more than once 
-   // water is now executing at a really slow pace too bc of step
 
-pauseBtn.addEventListener('click', function() {clearInterval(timer);});
+// pauseBtn.addEventListener('click', function() {clearInterval(timer);});
 
-nextBtn.addEventListener('click', step);
+// nextBtn.addEventListener('click', step);
 
 reBtn.addEventListener('click', function() {
+   toggleBtnOnOff(reBtn);
    clearInterval(timer);
    restart();
 });
 
+gardenInfoBtn.addEventListener('click', function() {
+   // toggleBtnOnOff(gardenInfoBtn);
+   cycleInfo();
+})
+
 //reBtn.addEventListener('click', restart);
 
+infoPage.addEventListener('click', function() {
+   cycleInfo();
+   // console.log('allInfo page clicked')
+})
 
 
 

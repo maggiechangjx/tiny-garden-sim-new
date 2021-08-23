@@ -1,10 +1,10 @@
 import "./style/main.css";
 
 module.exports = {
-   WIDTH: 90,
-   SKY_HEIGHT: 20,
-   SOIL_HEIGHT: 60,
-   HEIGHT: 80,
+   WIDTH: 95,
+   SKY_HEIGHT: 15,
+   SOIL_HEIGHT: 50,
+   HEIGHT: 65,
    MYCOR_NUM: 2,
    MYCOR_RADIUS: 5,
    MYCOR_MIN_RADIUS: 1,

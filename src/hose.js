@@ -14,7 +14,7 @@ Code for:
 // set up
 // ======
 
-import "./style/hose.css";
+import "./style/main.css";
 import "./style/nutri-grid.css"
 import {coordY, coordX, coordToIndex} from './index-coord-helper.js'; 
 
